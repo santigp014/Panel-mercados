@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Panel Mercados</title>
+  <style>
+    :root { --gap: 14px; --card-radius: 14px; }
+    body { margin: 0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; background:#0b0f19; color:#e8eefc; }
+    header { position: sticky; top: 0; z-index: 10; background: rgba(11,15,25,.9); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(255,255,255,.08); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 14px; }
+    h1 { font-size: 18px; margin: 0 0 10px 0; font-weight: 650; letter-spacing: .2px; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: var(--gap);
+    }
+    .card {
+      grid-column: span 6;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      min-height: 360px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    }
+    .card .title {
+      padding: 10px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: rgba(232,238,252,.9);
+    }
+    .badge { font-size: 12px; color: rgba(232,238,252,.65); }
+    .tv { height: 320px; }
+    @media (max-width: 900px) {
+      .card { grid-column: span 12; }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="wrap">
+      <h1>Panel Mercados</h1>
+
+      <!-- Ticker superior -->
+      <div class="tradingview-widget-container">
+        <div class="tradingview-widget-container__widget"></div>
+        <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-tickers.js" async>
+        {
+          "symbols": [
+            { "proName": "NYSE:CRM",        "title": "Salesforce" },
+            { "proName": "BITSTAMP:BTCUSD", "title": "Bitcoin" },
+            { "proName": "FX_IDC:EURUSD",   "title": "EUR/USD" },
+            { "proName": "NASDAQ:IXIC",     "title": "NASDAQ (IXIC)" },
+            { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
+            { "proName": "TVC:IBEX35",      "title": "IBEX 35" },
+            { "proName": "TVC:UKOIL",       "title": "Brent" }
+          ],
+          "colorTheme": "dark",
+          "isTransparent": true,
+          "showSymbolLogo": true,
+          "locale": "es"
+        }
+        </script>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <script>
+    // Crea una tarjeta con un Advanced Chart por símbolo (precio + gráfica)
+    // Basado en el embed oficial de TradingView Advanced Chart. :contentReference[oaicite:7]{index=7}
+    const items = [
+      { title: "Salesforce",      symbol: "NYSE:CRM",        badge: "$"  },
+      { title: "Bitcoin",         symbol: "BITSTAMP:BTCUSD", badge: "$"  },
+      { title: "Cambio EUR/USD",  symbol: "FX_IDC:EURUSD",   badge: "$/€" },
+      { title: "NASDAQ (IXIC)",   symbol: "NASDAQ:IXIC",     badge: "$"  },
+      { title: "S&P 500",         symbol: "FOREXCOM:SPXUSD", badge: "$"  },
+      { title: "IBEX 35",         symbol: "TVC:IBEX35",      badge: "€"  },
+      { title: "Petróleo (Brent)",symbol: "TVC:UKOIL",       badge: "$/bbl" }
+      // Si quieres WTI: cambia TVC:UKOIL por TVC:USOIL
+    ];
+
+    const grid = document.getElementById("grid");
+
+    function addCard({ title, symbol, badge }) {
+      const card = document.createElement("section");
+      card.className = "card";
+
+      const head = document.createElement("div");
+      head.className = "title";
+      head.innerHTML = `<span>${title}</span><span class="badge">${symbol} · ${badge}</span>`;
+
+      const container = document.createElement("div");
+      const widgetId = "tv_" + Math.random().toString(16).slice(2);
+      container.className = "tv";
+      container.innerHTML = `
+        <div class="tradingview-widget-container" style="height:100%;width:100%">
+          <div class="tradingview-widget-container__widget" style="height:100%;width:100%"></div>
+        </div>
+      `;
+
+      card.appendChild(head);
+      card.appendChild(container);
+      grid.appendChild(card);
+
+      const script = document.createElement("script");
+      script.src = "https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js";
+      script.async = true;
+      script.innerHTML = JSON.stringify({
+        autosize: true,
+        symbol,
+        interval: "D",
+        timezone: "Europe/Madrid",
+        theme: "dark",
+        style: "1",
+        locale: "es",
+        withdateranges: true,
+        allow_symbol_change: false,
+        details: true,
+        calendar: false,
+        support_host: "https://www.tradingview.com"
+      });
+      container.querySelector(".tradingview-widget-container").appendChild(script);
+    }
+
+    items.forEach(addCard);
+  </script>
+</body>
+</html>
