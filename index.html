@@ -57,8 +57,11 @@
             { "proName": "FX_IDC:EURUSD",   "title": "EUR/USD" },
             { "proName": "NASDAQ:IXIC",     "title": "NASDAQ (IXIC)" },
             { "proName": "FOREXCOM:SPXUSD", "title": "S&P 500" },
-            { "proName": "BME:IBC",      "title": "IBEX 35" },
-            { "proName": "TVC:UKOIL",       "title": "Brent" }
+            { "proName": "BME:IBC",         "title": "IBEX 35" },
+            { "proName": "TVC:UKOIL",       "title": "Brent" },
+
+            { "proName": "XAGEUR",          "title": "Plata (EUR)" },
+            { "proName": "EURONEXT:PX1",    "title": "CAC 40" }
           ],
           "colorTheme": "dark",
           "isTransparent": true,
@@ -75,17 +78,17 @@
   </main>
 
   <script>
-    // Crea una tarjeta con un Advanced Chart por símbolo (precio + gráfica)
-    // Basado en el embed oficial de TradingView Advanced Chart. :contentReference[oaicite:7]{index=7}
     const items = [
-      { title: "Salesforce",      symbol: "NYSE:CRM",        badge: "$"  },
-      { title: "Bitcoin",         symbol: "BITSTAMP:BTCUSD", badge: "$"  },
-      { title: "Cambio EUR/USD",  symbol: "FX_IDC:EURUSD",   badge: "$/€" },
-      { title: "NASDAQ (IXIC)",   symbol: "NASDAQ:IXIC",     badge: "$"  },
-      { title: "S&P 500",         symbol: "FOREXCOM:SPXUSD", badge: "$"  },
-      { title: "IBEX 35",         symbol: "BME:IBC",      badge: "€"  },
-      { title: "Petróleo (Brent)",symbol: "TVC:UKOIL",       badge: "$/bbl" }
-      // Si quieres WTI: cambia TVC:UKOIL por TVC:USOIL
+      { title: "Salesforce",        symbol: "NYSE:CRM",         badge: "$"     },
+      { title: "Bitcoin",           symbol: "BITSTAMP:BTCUSD",  badge: "$"     },
+      { title: "Cambio EUR/USD",    symbol: "FX_IDC:EURUSD",    badge: "$/€"   },
+      { title: "NASDAQ (IXIC)",     symbol: "NASDAQ:IXIC",      badge: "$"     },
+      { title: "S&P 500",           symbol: "FOREXCOM:SPXUSD",  badge: "$"     },
+      { title: "IBEX 35",           symbol: "BME:IBC",          badge: "€"     },
+      { title: "Petróleo (Brent)",  symbol: "TVC:UKOIL",        badge: "$/bbl" },
+
+      { title: "Plata (EUR)",       symbol: "XAGEUR",           badge: "€"     },
+      { title: "CAC 40",            symbol: "EURONEXT:PX1",     badge: "€"     }
     ];
 
     const grid = document.getElementById("grid");
@@ -99,7 +102,6 @@
       head.innerHTML = `<span>${title}</span><span class="badge">${symbol} · ${badge}</span>`;
 
       const container = document.createElement("div");
-      const widgetId = "tv_" + Math.random().toString(16).slice(2);
       container.className = "tv";
       container.innerHTML = `
         <div class="tradingview-widget-container" style="height:100%;width:100%">
@@ -135,3 +137,5 @@
   </script>
 </body>
 </html>
+
+
